@@ -14,7 +14,7 @@ var canWork = navigator.getUserMedia || navigator.webkitGetUserMedia || navigato
 $(document).ready(function($) {
 
     // Trigger voice search on click
-    $('#mic-btn').click(function() {
+    $('#btn-voice-search').click(function() {
         micOnClick();
     });
 });

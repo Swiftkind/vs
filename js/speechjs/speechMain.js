@@ -43,11 +43,19 @@ function stopRecording() {
         audioRecorder.stop();
         stopWebSocket();
         $("#mic-btn").removeClass("listening");
-        $(".speak-message").text("Click Microphone to Begin.");
-        
-        // Get speech content after recording and copy it to HTML input
-        var voice_input = document.getElementById("voice-output");
-        document.getElementById("search-engine-form-input").value = voice_input.innerHTML;
+
+        var voice_input = document.getElementById("voice-output").innerHTML;
+        console.log("Text Output: " + "'" + voice_input + "'");
+        if(voice_input != null) {
+            // Get speech content after recording and copy it to HTML input
+            document.getElementById("search-engine-form-input").value = voice_input;
+            $('#voice-search-modal').removeClass('open fadeIn');
+            $('#voice-search-modal').addClass('fadeOut');
+        }
+        if(voice_input == null || voice_input == ' ' || voice_input == '') {
+            $("#speak-message").text("Didn't get that. Let's Try Again.");
+            micOnClick();
+        }
     }
 }
 
@@ -68,6 +76,16 @@ function micOnClick() {
     }
     else {
         this.startRecording();
-        $(".speak-message").text("Recording Input...");
+
+        $("#speak-message").text("Loading...");
+        
+        setInterval(function() {
+            var micListening = $("#mic-btn").hasClass('listening');
+            if(micListening == true) {
+                setTimeout(function() {
+                    stopRecording();
+                }, 7500);
+            }
+        }, 3500);
     }
 }

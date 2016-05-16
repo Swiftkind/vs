@@ -25,9 +25,6 @@
     <script src="js/speechjs/speechWS.js"></script>
     <script src="js/speechjs/speechIndex.js"></script>
     <script src="js/speechjs/speechRecaptcha.js"></script>  
-    <!-- <script src="js/speechjs/speech.1.0.0.js"></script>       -->
-    <!-- <script src="js/speechjs/speechInputData.js"></script> -->
-    <!-- <script src="js/speechSendData.js"></script> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -41,25 +38,22 @@
         <div class="row">
             <div id="voice-search-modal" class="voice-search-modal flex-display">
                 <div id="modal-wrapper">
-                    <span id="voice-search-close" class="voice-search-close">
-                        <a href="#" class="img-responsive" title="Close Voice Search"><i class="fa fa-times fa-2x">&nbsp;</i></a>
-                    </span>
                     <div class="container">
                         <div class="row">
                             <div class="voice-search-info center-wrapper flex-display col-xs-12 col-sm-12 col-md-7">
                                 <div class="col-xs-12 col-sm-12 col-md-9">
                                     <span class="voice-search-message">
-                                        <h3 class="speak-message">Click the Microphone Icon to Begin.</h3>
-                                        <h3 id="voice-output"></h3>
+                                        <h3 id="speak-message" class="speak-message"></h3>
+                                        <h3 id="voice-output" class="voice-output"></h3>
                                     </span>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-3">
-                                    <button id="mic-btn" class="mic-btn">
+                                    <span id="mic-btn" class="mic-btn">
                                         <span class="voice-search-echo-beat beat-1 animate pulse"></span>
                                         <span class="voice-search-dynamic center-wrapper flex-display">
                                             <i class="fa fa-microphone fa-4x"></i>
                                         </span>
-                                    </button>
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +66,7 @@
                     <div class="form-group flex-display">
                         <input type="text" class="form-control" id="search-engine-form-input" />
                         <span class="voice-search" id="voice-search">
-                            <button id="btn-voice-search" class="btn-voice-search" title="Use Voice Search"><i class="fa fa-microphone fa-2x"></i></button>
+                            <button id="btn-voice-search" class="btn-voice-search" title="Load Voice Search"><i class="fa fa-microphone fa-2x"></i></button>
                         </span>
                     </div>
                 </form>
