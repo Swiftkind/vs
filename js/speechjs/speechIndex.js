@@ -18,9 +18,3 @@ $(document).ready(function($) {
         micOnClick();
     });
 });
-
-function startVoiceSearch() {
-    stopRecording();
-    $("#voice-output").empty();
-    textDisplay = "";
-}

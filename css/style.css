@@ -168,6 +168,10 @@ form.search-form input[type='text'] {
     -o-animation-iteration-count: 1;
     -ms-animation-duration: .25s;
     -ms-animation-iteration-count: 1;
+    -moz-animation-delay: .45s;
+    -webkit-animation-delay: .45s;
+    -o-animation-delay: .45s;
+    -ms-animation-delay: .45s;
 }
 .voice-search-message h3#voice-output {
     font-style: italic;

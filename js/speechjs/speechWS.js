@@ -2,7 +2,6 @@ var websocket = null;
 var textDisplay = "";
 
 function startWebSocketForMic() {
-    startVoiceSearch();
     /// TODO: Hack to get around restrictions of Akamai on websocket.
     var hostString = "cog-web-wu.azurewebsites.net";
     if (window.location.port != "80" && window.location.port != "") {
@@ -35,7 +34,6 @@ function getWebSocket(uri) {
         else if (data == "Throttled" || data == "Captcha Fail") {
             $('#voice-output').text(data);
             reCaptchaSdk.ProcessReCaptchaStateCode(data, 'reCaptcha-Speech2Text-demo');
-            stopSounds();
             return;
         }
         else {
