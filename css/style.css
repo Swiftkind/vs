@@ -159,6 +159,16 @@ form.search-form input[type='text'] {
     float: left;
     clear: both;
 }
+.voice-search-message h3#speak-message {
+    -moz-animation-duration: .25s;
+    -moz-animation-iteration-count: 1;
+    -webkit-animation-duration: .25s;
+    -webkit-animation-iteration-count: 1;
+    -o-animation-duration: .25s;
+    -o-animation-iteration-count: 1;
+    -ms-animation-duration: .25s;
+    -ms-animation-iteration-count: 1;
+}
 .voice-search-message h3#voice-output {
     font-style: italic;
     font-size: 20px;

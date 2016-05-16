@@ -45,16 +45,21 @@ function stopRecording() {
         $("#mic-btn").removeClass("listening");
 
         var voice_input = document.getElementById("voice-output").innerHTML;
+        
+        // Debugging purposes
         console.log("Text Output: " + "'" + voice_input + "'");
+
         if(voice_input != null) {
+            console.log(voice_input);
             // Get speech content after recording and copy it to HTML input
             document.getElementById("search-engine-form-input").value = voice_input;
             $('#voice-search-modal').removeClass('open fadeIn');
-            $('#voice-search-modal').addClass('fadeOut');
         }
         if(voice_input == null || voice_input == ' ' || voice_input == '') {
-            $("#speak-message").text("Didn't get that. Let's Try Again.");
-            micOnClick();
+            $("#speak-message").text("Didn't get that. Let's try again.");
+            setInterval(function() {
+                micOnClick();
+            }, 3000);
         }
     }
 }
@@ -84,7 +89,7 @@ function micOnClick() {
             if(micListening == true) {
                 setTimeout(function() {
                     stopRecording();
-                }, 7500);
+                }, 8000);
             }
         }, 3500);
     }
