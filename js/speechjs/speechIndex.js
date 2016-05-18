@@ -11,7 +11,15 @@ var isIE11 = !(window.ActiveXObject) && "ActiveXObject" in window;
 var isIE = !isOpera && (isIE11 || check(/msie/));
 var canWork = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 
-$(document).ready(function($) {
+$(document).ready(function() {
+    // Browser Compatibility Additions
+    if(canWork || (isChrome && isFF && isOpera)) {
+        $('.warnInfo').hide();
+    } else {
+        $('#btn-voice-search').hide();
+        $('#search-engine-form-input').hide();
+        $('.warnInfo').show();
+    }
 
     // Trigger voice search on click
     $('#btn-voice-search').click(function() {

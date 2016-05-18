@@ -143,6 +143,12 @@ form.search-form input[type='text'] {
     position: relative;
     top: -8rem;
 }
+@media screen and (max-width: 1024px) {
+    .voice-search-info {
+        display: block;
+        top: 0;
+    }
+}
 .voice-search-message {
     min-height: 50px;
     float: left;

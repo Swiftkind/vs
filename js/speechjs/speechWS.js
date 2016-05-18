@@ -10,6 +10,7 @@ function startWebSocketForMic() {
     var uri = 'wss://' + hostString + '/cognitive-services' + '/ws/speechtotextdemo?language=' + 'en-US'
             + '&g_Recaptcha_Response=' + reCaptchaSdk.g_Recaptcha_Response + '&isNeedVerify=' + reCaptchaSdk.isNeedVerify;
     websocket = getWebSocket(uri);
+
     websocket.onopen = function () {
         audioRecorder.sendHeader(websocket);
         audioRecorder.record(websocket);
@@ -19,48 +20,20 @@ function startWebSocketForMic() {
     };
 }
 
+// Check if WebSockets is available and browser-compatible
+function webSocketSupported() {
+    return "WebSocket" in window;
+}
+
 function getWebSocket(uri) {
-    websocket = new WebSocket(uri);
-    websocket.onerror = function (event) {    
-        stopRecording();
-        websocket.close();
-    };
+    if(webSocketSupported() == true) {
 
-    websocket.onmessage = function (event) {
-        var data = event.data.toString();
-        if (data == null || data.length <= 0) {
-            return;
-        }
-        else if (data == "Throttled" || data == "Captcha Fail") {
-            $('#voice-output').text(data);
-            reCaptchaSdk.ProcessReCaptchaStateCode(data, 'reCaptcha-Speech2Text-demo');
-            return;
-        }
-        else {
-            reCaptchaSdk.RemoveReCaptcha();
-        }
-        if (data == null || data.length <= 0) {
-            return;
-        }
+        // Establish new WebSocket connection
+        websocket = new WebSocket(uri);
 
-        var ch = data.charAt(0);
-        var message = data.substring(1);
-        if (ch == 'e') {
-            stopRecording();
-        }
-        else {
-            var text = textDisplay + message;
-            if (ch == 'f') {
-                textDisplay = text + " ";
-            }
-
-            $('#voice-output').text(text);
-        }
-    };
-
-    websocket.onclose = function (event) {
-        stopRecording();
-    };
-
-    return websocket;
+        return websocket;
+    } else {
+        // Send alert to user if WebSocket is not available in user's current browser version
+        alert("Hello user! Some functionalities of the site need specific versions of browsers. Its highly recommended you update your browser version.");
+    }
 }
