@@ -44,60 +44,18 @@ function stopRecording() {
 
         stopWebSocket();
 
-        $("#mic-btn").removeClass("listening");
-        
-        console.log("Stop Recording...");
-        console.log(websocket);
+        setTimeout(function() {
+            $("#mic-btn").removeClass("listening");
+        }, 3500);
     } 
 }
 
 // Stop Web socket 
 function stopWebSocket() {
     if(websocket) {
-        websocket.onmessage = function() {
-            var data = event.data.toString();
-            if (data == null || data.length <= 0) {
-                return;
-            }
-            else if (data == "Throttled" || data == "Captcha Fail") {
-                $('#voice-output').text(data);
-                reCaptchaSdk.ProcessReCaptchaStateCode(data, 'reCaptcha-Speech2Text-demo');
-                stopSounds();
-                return;
-            }
-            else {
-                reCaptchaSdk.RemoveReCaptcha();
-            }
-            if (data == null || data.length <= 0) {
-                return;
-            }
-
-            var ch = data.charAt(0);
-            var message = data.substring(1);
-            if (ch == 'e') {
-                stopRecording();
-            }
-            else {
-                var text = textDisplay + message;
-                if (ch == 'f') {
-                    textDisplay = text + " ";
-                }
-
-                $('#voice-output').text(text);
-                console.log(text);
-            }
-        };
-        websocket.onerror = function(event) {
-            console.log("WebSocket Error: " + event);
-            websocket.close();
-            stopRecording();
-        };
-        window.onbeforeunload = function() {
-            websocket.onclose = function() {
-                console.log("Closing WebSocket Connection..");
-                websocket.close();
-            };
-        };
+        websocket.onmessage = function() {};
+        websocket.onerror = function() {};
+        window.onbeforeunload = function() {};
     }
 }
 
@@ -112,7 +70,7 @@ function micOnClick() {
 
         // Capture text/s then add them to HTML input
         getConvertedSpeechToText(); 
-    }, 8000);
+    }, 12000);
 }
 
 // Get converted speech text and stop recording after x no. of seconds
@@ -121,20 +79,24 @@ function getConvertedSpeechToText() {
     var voice_input = document.getElementById("voice-output").innerHTML;
 
     if(voice_input != null && voice_input != '' && voice_input != ' ') {       
-
-        // Get speech content after recording and copy it to HTML input
-        document.getElementById("search-engine-form-input").value = voice_input;
-        $('#voice-search-modal').removeClass('open animated fadeIn');
+        setTimeout(function() {
+            // Get speech content after recording and copy it to HTML input
+            document.getElementById("search-engine-form-input").value = voice_input;
+            $('#voice-search-modal').removeClass('open animated fadeIn');
+        }, 3500);
 
         // Stop recording to give way for short delay to register voice text
         stopRecording();
     }
     else {
-        stopRecording();
-
         setTimeout(function() {
-            $("#speak-message").text("Trying again.");            
-            micOnClick();
-        }, 1500);
+            $("#speak-message").text("Trying again.");  
+
+            setTimeout(function() {
+                micOnClick();
+            }, 3500);          
+        }, 3500);
+
+        stopRecording();
     }   
 }

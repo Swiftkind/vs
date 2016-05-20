@@ -2,6 +2,7 @@ var websocket = null;
 var textDisplay = "";
 
 function startWebSocketForMic() {
+    startVoiceSearch();
     /// TODO: Hack to get around restrictions of Akamai on websocket.
     var hostString = "cog-web-wu.azurewebsites.net";
     if (window.location.port != "80" && window.location.port != "") {
@@ -10,33 +11,59 @@ function startWebSocketForMic() {
     var uri = 'wss://' + hostString + '/cognitive-services' + '/ws/speechtotextdemo?language=' + 'en-US'
             + '&g_Recaptcha_Response=' + reCaptchaSdk.g_Recaptcha_Response + '&isNeedVerify=' + reCaptchaSdk.isNeedVerify;
     websocket = getWebSocket(uri);
-
     websocket.onopen = function () {
         audioRecorder.sendHeader(websocket);
         audioRecorder.record(websocket);
-
-        console.log("Start Recording...");
-        console.log(websocket);
 
         $("#mic-btn").addClass("listening");
         $("#speak-message").text("Speak Now...");
     };
 }
 
-// Check if WebSockets is available and browser-compatible
-function webSocketSupported() {
-    return "WebSocket" in window;
-}
-
 function getWebSocket(uri) {
-    if(webSocketSupported() == true) {
+    websocket = new WebSocket(uri);
+        websocket.onmessage = function() {
+            var data = event.data.toString();
+            if (data == null || data.length <= 0) {
+                return;
+            }
+            else if (data == "Throttled" || data == "Captcha Fail") {
+                $('#voice-output').text(data);
+                reCaptchaSdk.ProcessReCaptchaStateCode(data, 'reCaptcha-Speech2Text-demo');
+                stopSounds();
+                return;
+            }
+            else {
+                reCaptchaSdk.RemoveReCaptcha();
+            }
+            if (data == null || data.length <= 0) {
+                return;
+            }
 
-        // Establish new WebSocket connection
-        websocket = new WebSocket(uri);
+            var ch = data.charAt(0);
+            var message = data.substring(1);
+            if (ch == 'e') {
+                stopRecording();
+            }
+            else {
+                var text = textDisplay + message;
+                if (ch == 'f') {
+                    textDisplay = text + " ";
+                }
 
-        return websocket;
-    } else {
-        // Send alert to user if WebSocket is not available in user's current browser version
-        alert("Hello user! Some functionalities of the site need specific versions of browsers. Its highly recommended you update your browser version.");
-    }
+                $('#voice-output').text(text);
+
+            }
+        };
+        websocket.onerror = function(event) {
+            console.log("WebSocket Error: " + event);
+            websocket.close();
+        };
+        window.onbeforeunload = function() {
+            websocket.onclose = function() {
+            };
+            websocket.close();
+        };
+
+    return websocket;
 }
