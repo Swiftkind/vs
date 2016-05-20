@@ -39,71 +39,102 @@ function stopRecording() {
 
         if(audioSource.stop) {
             audioSource.stop();
+            audioRecorder.stop();
         }
-        audioRecorder.stop();
+
         stopWebSocket();
+
         $("#mic-btn").removeClass("listening");
-        return true;
-    }
-    else {
-        stopWebSocket();
-    }
+        
+        console.log("Stop Recording...");
+        console.log(websocket);
+    } 
 }
 
 // Stop Web socket 
 function stopWebSocket() {
-    console.log(websocket);
     if(websocket) {
-        websocket.onmessage = function() {};
-        websocket.onerror = function() {};
-        if(websocket.onerror()) {
-            console.log("WS Error");
-        }
-        websocket.onclose = function() {};
-        websocket.close();
+        websocket.onmessage = function() {
+            var data = event.data.toString();
+            if (data == null || data.length <= 0) {
+                return;
+            }
+            else if (data == "Throttled" || data == "Captcha Fail") {
+                $('#voice-output').text(data);
+                reCaptchaSdk.ProcessReCaptchaStateCode(data, 'reCaptcha-Speech2Text-demo');
+                stopSounds();
+                return;
+            }
+            else {
+                reCaptchaSdk.RemoveReCaptcha();
+            }
+            if (data == null || data.length <= 0) {
+                return;
+            }
+
+            var ch = data.charAt(0);
+            var message = data.substring(1);
+            if (ch == 'e') {
+                stopRecording();
+            }
+            else {
+                var text = textDisplay + message;
+                if (ch == 'f') {
+                    textDisplay = text + " ";
+                }
+
+                $('#voice-output').text(text);
+                console.log(text);
+            }
+        };
+        websocket.onerror = function(event) {
+            console.log("WebSocket Error: " + event);
+            websocket.close();
+            stopRecording();
+        };
+        window.onbeforeunload = function() {
+            websocket.onclose = function() {
+                console.log("Closing WebSocket Connection..");
+                websocket.close();
+            };
+        };
     }
 }
 
 // Microphone start/stop record trigger
-function micOnClick() {    
+function micOnClick() { 
+    $("#speak-message").text("Loading...");  
+
+    // Start recording
     this.startRecording();
-    getConvertedSpeechToText();
+    
+    setTimeout(function() {
+
+        // Capture text/s then add them to HTML input
+        getConvertedSpeechToText(); 
+    }, 8000);
 }
 
 // Get converted speech text and stop recording after x no. of seconds
 function getConvertedSpeechToText() {
+    var micListening = $("#mic-btn").hasClass('listening');
+    var voice_input = document.getElementById("voice-output").innerHTML;
 
-    // Clear currently stored text from voice-output selector
-    $("#voice-output").empty();
-    textDisplay = "";
+    if(voice_input != null && voice_input != '' && voice_input != ' ') {       
 
-    $("#speak-message").text("Loading...");
-        
-    setInterval(function() {
-        var micListening = $("#mic-btn").hasClass('listening');
-        if(micListening == true) {
-            setTimeout(function() {
-                var voice_input = document.getElementById("voice-output").innerHTML;
+        // Get speech content after recording and copy it to HTML input
+        document.getElementById("search-engine-form-input").value = voice_input;
+        $('#voice-search-modal').removeClass('open animated fadeIn');
 
-                if(voice_input != null && voice_input != '' && voice_input != ' ') {
+        // Stop recording to give way for short delay to register voice text
+        stopRecording();
+    }
+    else {
+        stopRecording();
 
-                    stopRecording();
-                    setTimeout(function() {            
-                        // Get speech content after recording and copy it to HTML input
-                        document.getElementById("search-engine-form-input").value = voice_input;
-                        $('#voice-search-modal').removeClass('open fadeIn');
-                    }, 3500);
-                }
-                else {
-                    $("#speak-message").text("Didn't get that. Let's try again.");
-                    setTimeout(function() {
-                        stopRecording();
-                        setTimeout(function() {
-                            getConvertedSpeechToText();
-                        }, 3500);
-                    }, 3500);
-                }
-            }, 8000);
-        }
-    }, 3500);
+        setTimeout(function() {
+            $("#speak-message").text("Trying again.");            
+            micOnClick();
+        }, 1500);
+    }   
 }

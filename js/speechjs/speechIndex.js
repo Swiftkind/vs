@@ -23,6 +23,16 @@ $(document).ready(function() {
 
     // Trigger voice search on click
     $('#btn-voice-search').click(function() {
+        // AnimateCSS modal animation
+        $('#voice-search-modal').addClass('open animated fadeIn');
+
+        // Execute recording process
         micOnClick();
     });
 });
+
+function startVoiceSearch() {
+    stopRecording();
+    $("#voice-output").empty();
+    textDisplay = "";
+}

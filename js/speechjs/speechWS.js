@@ -15,6 +15,9 @@ function startWebSocketForMic() {
         audioRecorder.sendHeader(websocket);
         audioRecorder.record(websocket);
 
+        console.log("Start Recording...");
+        console.log(websocket);
+
         $("#mic-btn").addClass("listening");
         $("#speak-message").text("Speak Now...");
     };
