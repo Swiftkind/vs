@@ -13,18 +13,18 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.2/css/font-awesome.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
 
     <!-- JS Scripts -->
     <script src="https://code.jquery.com/jquery-2.2.3.js" integrity="sha256-laXWtGydpwqJ8JA+X9x2miwmaiKhn8tVmOVEigRNtP4="crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <!-- SpeechJS API -->
-    <script src="js/speechjs/speechRecorder.js"></script>
-    <script src="js/speechjs/speechMain.js"></script>    
-    <script src="js/speechjs/speechWS.js"></script>
-    <script src="js/speechjs/speechIndex.js"></script>
-    <script src="js/speechjs/speechRecaptcha.js"></script>  
+    <script src="{{ url_for('static', filename='js/speechjs/speechRecorder.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/speechjs/speechMain.js') }}"></script>    
+    <script src="{{ url_for('static', filename='js/speechjs/speechWS.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/speechjs/speechIndex.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/speechjs/speechRecaptcha.js') }}"></script>  
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +36,7 @@
 <body class="flex-display">
     <div class="container">
         <div class="row">
-            <div id="voice-search-modal" class="voice-search-modal flex-display">
+            <div id="voice-search-modal" class="voice-search-modal flex-display">{{ name }}
                 <div id="modal-wrapper">
                     <div class="container">
                         <div class="row">
