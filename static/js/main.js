@@ -84,7 +84,6 @@ function startButton(event) {
   }
   function stopRecording(button) {
     recorder && recorder.stop();
-    button.disabled = true;
     
     // create WAV download link using audio data blob
     createDownloadLink();
@@ -93,13 +92,16 @@ function startButton(event) {
   }
   function createDownloadLink() {
     recorder && recorder.exportWAV(function(blob) {
-      var url = URL.createObjectURL(blob);
-      var hf = document.createElement('a');
-
-      hf.href = url;
-      hf.download = new Date().toISOString() + '.wav';
-      hf.innerHTML = hf.download;
-      hf.click();
+      var fd = new FormData();
+      fd.append('filename',name);
+      fd.append('data',blob);
+      $.ajax({
+        type: "POST",
+        url: 'http://127.0.0.1:5000/upload',
+        data: fd,
+        processData: false,
+        contentType: false
+      });
     });
   }
   window.onload = function init() {
