@@ -1,13 +1,12 @@
 import os
-import datetime
+import boto3
+from .config import key
 from flask import Flask, flash, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/media'
-ALLOWED_EXTENSIONS = set(['wav'])
-
 app = Flask(__name__)
 
+s3 = boto3.resource('s3')
 
 @app.route('/')
 def mainapp():
@@ -17,10 +16,8 @@ def mainapp():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        now = datetime.datetime.now()
         file = request.files['data']
-        filename = secure_filename('audio '  + str(now))
-        file.save('media/'+filename)
+        s3.Bucket('search.audio').put_object(Key=key, Body=file)
         return redirect('/')
 
 
