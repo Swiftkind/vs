@@ -26,7 +26,6 @@ pip-log.txt
 *.swp
 # sublime temp files
 ._*
-/static
 /media
 /media
 /persistent

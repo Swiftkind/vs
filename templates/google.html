@@ -1,37 +1,22 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-  * {
-    font-family: Verdana, Arial, sans-serif;
-  }
-  a:link {
-    color:#000;
-    text-decoration: none;
-  }
-  a:visited {
-    color:#000;
-  }
-  a:hover {
-    color:#33F;
-  }
-  .center {
-    padding: 10px;
-    text-align: center;
-  }
-  .final {
-    color: black;
-    padding-right: 3px; 
-  }
-  #headline {
-    font-size: 40px;
-    font-weight: 300;
-  }
-</style>
-<h1 class="center" id="headline">
-<div id="">
-  <input id="final_span" type="text" name="">
-  <button id="start_button" onclick="startButton(this)">
-    <img id="start_img" src="{{url_for('static',filename='mic.gif')}}" alt="Start"></button>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
+<body class="flex-display">
+<div class="row">
+  <div class="col-md-6 col-md-offset-5">
+    <input id="final_span" type="text" name="">
+    <button id="start_button" onclick="startButton(this)">
+    <img id="start_img" src="{{url_for('static',filename='images/mic.gif')}}" alt="Start"></button>
+  </div>
 </div>
-<script type="text/javascript" src="{{url_for('static',filename='main.js')}}"></script>
-<script type="text/javascript" src="{{url_for('static',filename='recorder.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/main.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/recorder.js')}}"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
