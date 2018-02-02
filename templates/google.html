@@ -6,15 +6,24 @@
 
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/style.css')}}">
 </head>
-<body class="flex-display">
-<div class="row">
-  <div class="col-md-6 col-md-offset-5">
-    <input id="final_span" type="text" name="">
-    <button id="start_button" onclick="startButton(this)">
-    <img id="start_img" src="{{url_for('static',filename='images/mic.gif')}}" alt="Start"></button>
+<body>
+<div id="search-form">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-4">
+    <form class="form-inline">
+      <div class="form-group">
+        <input class="form-control input-lg" id="final_span" type="text">
+      </div>
+      <div id="start_icon" class="form-group">
+      <i class="fas fa-microphone fa-3x" onclick="startButton(this)"></i>
+      </div>
+    </form>
+    </div>
   </div>
 </div>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <script
   src="http://code.jquery.com/jquery-3.3.1.min.js"
   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="

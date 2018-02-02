@@ -5,14 +5,13 @@ var start_timestamp;
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
-  start_button.style.display = 'inline-block';
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = false;
   recognition.interimResults = true;
 
   recognition.onstart = function() {
     recognizing = true;
-    start_img.src = 'static/images/mic-animate.gif';
+    $('#start_icon').css({"color":"#0000ff"});
   };
 
   recognition.onend = function() {
@@ -20,7 +19,6 @@ if (!('webkitSpeechRecognition' in window)) {
     if (ignore_onend) {
       return;
     }
-    start_img.src = 'static/images/mic.gif';
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
       var range = document.createRange();
@@ -28,6 +26,7 @@ if (!('webkitSpeechRecognition' in window)) {
       window.getSelection().addRange(range);
     }
     stopRecording(this);
+    $('#start_icon').css({"color":"#000000"});
   };
 
   recognition.onresult = function(event) {
@@ -65,7 +64,6 @@ function startButton(event) {
   startRecording(this)
   ignore_onend = false;
   final_span.innerHTML = '';
-  start_img.src = 'static/images/mic-slash.gif';
   start_timestamp = event.timeStamp;
 }
 
