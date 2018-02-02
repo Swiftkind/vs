@@ -8,11 +8,12 @@ if (!('webkitSpeechRecognition' in window)) {
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = false;
   recognition.interimResults = true;
-
+  // When the user clicks the mic icon this function is called to start
+  // recognizing the words
   recognition.onstart = function() {
     recognizing = true;
   };
-
+  // This will be called after the app doesn't hear any words anymore
   recognition.onend = function() {
     recognizing = false;
     if (ignore_onend) {
@@ -26,7 +27,7 @@ if (!('webkitSpeechRecognition' in window)) {
     }
     stopRecording(this);
   };
-
+  // This will display the words
   recognition.onresult = function(event) {
     var interim_transcript = '';
     for (var i = event.resultIndex; i < event.results.length; ++i) {
@@ -76,14 +77,7 @@ var recorder;
 
 function startUserMedia(stream) {
   var input = audio_context.createMediaStreamSource(stream);
-  // Uncomment if you want the audio to feedback directly
-  //input.connect(audio_context.destination);
-  
   recorder = new Recorder(input);
-}
-
-if(AudioContext) {
-    audioContext = new AudioContext();
 }
 
 function startRecording(button) {
@@ -128,19 +122,5 @@ window.onload = function init() {
       "audio": true,
   }, gotAudioStream.bind(this), function(e) {
       window.alert("Microphone Access Was Rejected.");
-  });
-
-  try {
-    // webkit shim
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-    window.URL = window.URL || window.webkitURL;
-    
-    audio_context = new AudioContext;
-  } catch (e) {
-    alert('No web audio support in this browser!');
-  }
-  navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-
   });
 };
