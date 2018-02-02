@@ -27,7 +27,7 @@ $(document).ready(function() {
         $('#voice-search-modal').addClass('open animated fadeIn');
 
         // Execute recording process
-        micOnClick();
+        startButton(this);
     });
 });
 

@@ -20,11 +20,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <!-- SpeechJS API -->
-    <script src="{{ url_for('static', filename='js/speechjs/speechRecorder.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/speechjs/speechMain.js') }}"></script>    
-    <script src="{{ url_for('static', filename='js/speechjs/speechWS.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/speechjs/speechSendData.js') }}"></script>  
     <script src="{{ url_for('static', filename='js/speechjs/speechIndex.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/speechjs/speechRecaptcha.js') }}"></script>  
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/recorder.js') }}"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,7 +35,7 @@
 <body class="flex-display">
     <div class="container">
         <div class="row">
-            <div id="voice-search-modal" class="voice-search-modal flex-display">{{ name }}
+            <div id="voice-search-modal" class="voice-search-modal flex-display">
                 <div id="modal-wrapper">
                     <div class="container">
                         <div class="row">
@@ -44,7 +43,7 @@
                                 <div class="col-xs-12 col-sm-12 col-md-9">
                                     <span class="voice-search-message">
                                         <h3 id="speak-message" class="speak-message"></h3>
-                                        <h3 id="voice-output" class="voice-output"></h3>
+                                        <h3 id="voice_output" class="voice-output"></h3>
                                     </span>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-3">
