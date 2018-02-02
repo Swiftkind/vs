@@ -1,55 +1,5 @@
-*.py[co]
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-# we have a parts directory
-#parts
-var
-sdist
-develop-eggs
-.installed.cfg
-# Installer logs
-pip-log.txt
-# Unit test / coverage reports
-.coverage
-.tox
-#Translations
-*.mo
-#Mr Developer
-.mr.developer.cfg
-# OS-X thumbnails
-.DS_Store
-# vi swap files
-*.swp
-# sublime temp files
-._*
-/media
-/media
-/persistent
-/nbproject/private/
-/bs_jobs/*.tmp
-/jobs/*.tmp
-/jobs/static/jobs/img/*.lnk
-/jobs/static/jobs/js/modal-login_1.js
-/jobs/static/jobs/img/logo_sample_1.png
-/jobs/static/jobs/img/logo_sample_1.svg
-/jobs/static/jobs/less/fonts/list.txt
-/jobs/templates/jobs/*.tmp
-/bs_jobs/site_settings.py
-/jobs/logs/*.log
-Scout Dev.sublime-project
-Scout Dev.sublime-workspace
-node_modules/
-.vscode/
-
-.idea
+```*.py[cod]
+__pycache__/
+.DS_Store```
 venv/
-
-bs_jobs.sqlite3
-
-dev-settings.sh
-
-*.db
+env/

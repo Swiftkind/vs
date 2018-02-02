@@ -10,7 +10,7 @@ s3 = boto3.resource('s3')
 
 @app.route('/')
 def mainapp():
-    return render_template('google.html')
+    return render_template('index.html')
 
 
 @app.route('/upload', methods=['GET', 'POST'])
