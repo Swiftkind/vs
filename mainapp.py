@@ -1,6 +1,6 @@
 import os
 import boto3
-from .config import key
+from .config import key, secret_key
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
@@ -17,9 +17,8 @@ def mainapp():
 def upload_file():
     if request.method == 'POST':
         file = request.files['data']
-        import pdb;pdb.set_trace()
-        # s3.Bucket('search.audio').put_object(Key=key, Body=file)
+        s3.Bucket('search.audio').put_object(Key=key, Body=file)
         return redirect('/')
 
 
-app.secret_key = os.urandom(24)
+app.secret_key = secret_key
