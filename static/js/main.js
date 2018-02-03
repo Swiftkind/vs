@@ -26,6 +26,10 @@ if (!('webkitSpeechRecognition' in window)) {
       window.getSelection().addRange(range);
     }
     stopRecording(this);
+    // If the app didn't catch any words
+    if (voice_output.text == null || voice_output.text == '') {
+      $("#speak-message").text("Trying again.");
+    }
   };
   // This will display the words
   recognition.onresult = function(event) {
@@ -42,6 +46,7 @@ if (!('webkitSpeechRecognition' in window)) {
     $('#voice_output').text(voice_output.text);
     $("#speak-message").hide();
     $('#mic-btn').hide();
+
   };
 }
 
@@ -77,6 +82,7 @@ var recorder;
 
 function startUserMedia(stream) {
   var input = audio_context.createMediaStreamSource(stream);
+  
   recorder = new Recorder(input);
 }
 
@@ -86,7 +92,6 @@ function startRecording(button) {
 
 function stopRecording(button) {
   recorder && recorder.stop();
-  
   // create WAV download link using audio data blob
   createDownloadLink();
   
@@ -108,19 +113,21 @@ function createDownloadLink() {
   });
 }
 
-// Checks if audio was recognized
-function gotAudioStream(stream) {
-    this.audioSource = stream;
-}
-
 window.onload = function init() {
-  if(!navigator.getUserMedia) {
-    navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+  try {
+    // webkit shim
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+    window.URL = window.URL || window.webkitURL;
+    
+    audio_context = new AudioContext;
+    __log('Audio context set up.');
+    __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+  } catch (e) {
+    alert('No web audio support in this browser!');
   }
-
-  navigator.getUserMedia({
-      "audio": true,
-  }, gotAudioStream.bind(this), function(e) {
-      window.alert("Microphone Access Was Rejected.");
+  
+  navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+    __log('No live audio input: ' + e);
   });
 };

@@ -32,7 +32,6 @@ $(document).ready(function() {
 });
 
 function startVoiceSearch() {
-    stopRecording();
     $("#voice-output").empty();
     textDisplay = "";
 }

@@ -1,7 +1,7 @@
 import os
 import boto3
 from .config import key
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
