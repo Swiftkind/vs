@@ -105,7 +105,7 @@ function createDownloadLink() {
     fd.append('data',blob);
     $.ajax({
       type: "POST",
-      url: 'http://127.0.0.1:5000/upload',
+      url: PROTOCOL + '://' + DOMAIN_NAME + '/upload',
       data: fd,
       processData: false,
       contentType: false
@@ -121,13 +121,11 @@ window.onload = function init() {
     window.URL = window.URL || window.webkitURL;
     
     audio_context = new AudioContext;
-    __log('Audio context set up.');
-    __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
   } catch (e) {
     alert('No web audio support in this browser!');
   }
   
   navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-    __log('No live audio input: ' + e);
+    alert('No live audio input!');
   });
 };

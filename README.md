@@ -15,3 +15,7 @@ Setup boto3:
 * If you haven't just type the following command:
 - $ pip install awscli --upgrade --user
 - $ aws configure
+
+
+Setup upload link:
+- Go to js folder then change the config.js according to your settings

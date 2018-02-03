@@ -17,7 +17,8 @@ def mainapp():
 def upload_file():
     if request.method == 'POST':
         file = request.files['data']
-        s3.Bucket('search.audio').put_object(Key=key, Body=file)
+        import pdb;pdb.set_trace()
+        # s3.Bucket('search.audio').put_object(Key=key, Body=file)
         return redirect('/')
 
 
