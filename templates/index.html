@@ -20,7 +20,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
     <!-- SpeechJS API -->
-    <script src="{{ url_for('static', filename='js/speechjs/speechSendData.js') }}"></script>  
     <script src="{{ url_for('static', filename='js/speechjs/speechIndex.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/recorder.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/config.js') }}"></script>
@@ -44,8 +43,13 @@
                                 <div class="col-xs-12 col-sm-12 col-md-9">
                                     <span class="voice-search-message">
                                         <h3 id="speak-message" class="speak-message"></h3>
+                                        <h3 id="try-again" class="speak-message" onclick="searchAgain()">Try again. Click me</h3>
                                         <h3 id="voice_output" class="voice-output"></h3>
                                     </span>
+                                     <button id="search-again" class="btn btn-default" onclick="searchAgain()">Search again</button>
+                                    <div id="search_results">
+                                        <ul id="result" class="list-group"></ul>
+                                    </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-3">
                                     <span id="mic-btn" class="mic-btn">

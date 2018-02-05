@@ -17,5 +17,5 @@ Setup boto3:
 - $ aws configure
 
 
-Setup upload link:
-- Go to js folder then change the config.js according to your settings
+Setup upload link and API key:
+- Go to static/js folder then change the config.js according to your settings

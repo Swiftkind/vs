@@ -28,7 +28,22 @@ if (!('webkitSpeechRecognition' in window)) {
     stopRecording(this);
     // If the app didn't catch any words
     if (voice_output.text == null || voice_output.text == '') {
-      $("#speak-message").text("Trying again.");
+      $('#try-again').show();
+      $('#speak-message').hide();
+    } else {
+        // Submit keywords to google
+      var API_KEY = GOOGLE_API_KEY;
+      var query = voice_output.text;
+      var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
+
+      $.get(url, function(data){
+        for (counter = 0; counter <= data.items.length -1; counter++) {
+          $('#result').append('<li class="list-group-item">' + 'Title: ' + data.items[counter].title + '<br>' + 'Link: ' + '<a href=' + '"' + data.items[counter].link + '" '+ 'target="_blank"' +'>'+ data.items[counter].link +'</a>' +'</li>');
+        }
+        if (data.items != null) {
+          $('#search-again').show();
+        }
+      });
     }
   };
   // This will display the words
@@ -46,7 +61,6 @@ if (!('webkitSpeechRecognition' in window)) {
     $('#voice_output').text(voice_output.text);
     $("#speak-message").hide();
     $('#mic-btn').hide();
-
   };
 }
 
@@ -97,7 +111,7 @@ function stopRecording(button) {
   
   recorder.clear();
 }
-
+// Create a download link to save the audio file
 function createDownloadLink() {
   recorder && recorder.exportWAV(function(blob) {
     var fd = new FormData();
@@ -105,7 +119,7 @@ function createDownloadLink() {
     fd.append('data',blob);
     $.ajax({
       type: "POST",
-      url: PROTOCOL + '://' + DOMAIN_NAME + '/upload',
+      url: window.location.origin + '/upload',
       data: fd,
       processData: false,
       contentType: false
@@ -114,6 +128,8 @@ function createDownloadLink() {
 }
 
 window.onload = function init() {
+  $('#search-again').hide();
+  $('#try-again').hide();
   try {
     // webkit shim
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -128,4 +144,9 @@ window.onload = function init() {
   navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
     alert('No live audio input!');
   });
+
 };
+// If the user wants to search again function
+function searchAgain() {
+   window.location.href = "/";
+}
