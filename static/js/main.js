@@ -28,6 +28,7 @@ if (!('webkitSpeechRecognition' in window)) {
     stopRecording(this);
     // If the app didn't catch any words
     if (voice_output.text == null || voice_output.text == '') {
+      $("#speak-message").show();
       $('#speak-message').text("Try again.");
     } else {
         // Submit keywords to google
@@ -36,7 +37,7 @@ if (!('webkitSpeechRecognition' in window)) {
       var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
 
       $.get(url, function(data){
-        console.log(data.items);
+        var data = data.items; // Contains the data from google
       });
     }
     $('#voice_output').text(voice_output.text);
@@ -51,7 +52,7 @@ if (!('webkitSpeechRecognition' in window)) {
         interim_transcript += event.results[i][0].transcript;
       }
     }
-    $("#speak-message").hide(interim_transcript);
+    $("#speak-message").hide();
     final_transcript = capitalize(final_transcript);
     voice_output.text = linebreak(final_transcript);
     $('#voice_output').text(interim_transcript);
