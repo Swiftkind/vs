@@ -28,7 +28,6 @@ if (!('webkitSpeechRecognition' in window)) {
     stopRecording(this);
     // If the app didn't catch any words
     if (voice_output.text == null || voice_output.text == '') {
-      $('#try-again').show();
       $('#speak-message').hide();
     } else {
         // Submit keywords to google
@@ -37,14 +36,10 @@ if (!('webkitSpeechRecognition' in window)) {
       var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
 
       $.get(url, function(data){
-        for (counter = 0; counter <= data.items.length -1; counter++) {
-          $('#result').append('<li class="list-group-item">' + 'Title: ' + data.items[counter].title + '<br>' + 'Link: ' + '<a href=' + '"' + data.items[counter].link + '" '+ 'target="_blank"' +'>'+ data.items[counter].link +'</a>' +'</li>');
-        }
-        if (data.items != null) {
-          $('#search-again').show();
-        }
+        console.log(data.items);
       });
     }
+    $('#voice_output').text(voice_output.text);
   };
   // This will display the words
   recognition.onresult = function(event) {
@@ -56,11 +51,10 @@ if (!('webkitSpeechRecognition' in window)) {
         interim_transcript += event.results[i][0].transcript;
       }
     }
+    $("#speak-message").hide(interim_transcript);
     final_transcript = capitalize(final_transcript);
     voice_output.text = linebreak(final_transcript);
-    $('#voice_output').text(voice_output.text);
-    $("#speak-message").hide();
-    $('#mic-btn').hide();
+    $('#voice_output').text(interim_transcript);
   };
 }
 
@@ -128,8 +122,6 @@ function createDownloadLink() {
 }
 
 window.onload = function init() {
-  $('#search-again').hide();
-  $('#try-again').hide();
   try {
     // webkit shim
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -146,7 +138,3 @@ window.onload = function init() {
   });
 
 };
-// If the user wants to search again function
-function searchAgain() {
-   window.location.href = "/";
-}
