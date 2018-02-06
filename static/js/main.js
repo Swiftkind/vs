@@ -28,7 +28,7 @@ if (!('webkitSpeechRecognition' in window)) {
     stopRecording(this);
     // If the app didn't catch any words
     if (voice_output.text == null || voice_output.text == '') {
-      $('#speak-message').hide();
+      $('#speak-message').text("Try again.");
     } else {
         // Submit keywords to google
       var API_KEY = GOOGLE_API_KEY;
