@@ -1,6 +1,6 @@
 import os
 import boto3
-from .config import key, secret_key
+from .config import KEY, SECRET_KEY, BUCKET_NAME
 from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
@@ -17,8 +17,8 @@ def mainapp():
 def upload_file():
     if request.method == 'POST':
         file = request.files['data']
-        s3.Bucket('search.audio').put_object(Key=key, Body=file)
+        s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
         return redirect('/')
 
 
-app.secret_key = secret_key
+app.secret_key = SECRET_KEY

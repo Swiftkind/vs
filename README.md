@@ -13,9 +13,12 @@ Setup boto3:
 - $ aws configure
 
 * If you haven't just type the following command:
-- $ pip install awscli --upgrade --user
+- $ pip install awscli
 - $ aws configure
 
 
-Setup upload link and API key:
+Setup google API key:
 - Go to static/js folder then change the config.js according to your settings
+
+Setup s3 bucket:
+- Go to config.py then change the bucket name

@@ -1,6 +1,9 @@
 import datetime
 import os
 
-
-key = 'audio ' + str(datetime.datetime.now())
-secret_key = os.urandom(24)
+# Name of audio file
+KEY = 'audio ' + str(datetime.datetime.now())
+# Secret key of flask app
+SECRET_KEY = os.urandom(24)
+# S3 bucket name
+BUCKET_NAME = 'search.audio'
