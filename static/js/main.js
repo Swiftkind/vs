@@ -2,6 +2,7 @@ var final_transcript = '';
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
+
 if (!('webkitSpeechRecognition' in window)) {
   upgrade();
 } else {
@@ -32,10 +33,10 @@ if (!('webkitSpeechRecognition' in window)) {
       $('#speak-message').text("Try again.");
     } else {
         // Submit keywords to google
-      var API_KEY = GOOGLE_API_KEY;
-      var query = voice_output.text;
-      var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
-
+        const API_KEY = GOOGLE_API_KEY;
+        var query = voice_output.text;
+        var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
+        localStorage.setItem('queryset', url);
       $.get(url, function(data){
         var data = data.items; // Contains the data from google
       });
@@ -118,6 +119,10 @@ function createDownloadLink() {
       data: fd,
       processData: false,
       contentType: false
+    }).done(function(data){
+      window.location.href = window.location.origin + '/results';
+    }).fail(function(error){
+      console.log(error);
     });
   });
 }

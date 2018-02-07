@@ -14,11 +14,18 @@ def mainapp():
 
 
 @app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
+def uploadFile():
     if request.method == 'POST':
         file = request.files['data']
         s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
-        return redirect('/')
+        return ('', 200)
 
+    return ('', 400)
+
+
+@app.route('/results', methods=['GET'])
+def searchResults():
+    if request.method == 'GET':
+        return render_template('results.html')
 
 app.secret_key = SECRET_KEY
