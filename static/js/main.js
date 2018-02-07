@@ -37,6 +37,7 @@ if (!('webkitSpeechRecognition' in window)) {
         var query = voice_output.text;
         var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
         localStorage.setItem('queryset', url);
+        localStorage.setItem('voice_text', query);
       $.get(url, function(data){
         var data = data.items; // Contains the data from google
       });
