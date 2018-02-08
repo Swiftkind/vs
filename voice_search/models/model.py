@@ -2,7 +2,7 @@
 # an APP written in python and put hyphen or dash on
 # the name.
 
-from voice_search.manage import db
+from voice_search.database import db
 
 class SearchQuery(db.Model):
     id = db.Column(db.Integer, primary_key=True)

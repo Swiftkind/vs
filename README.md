@@ -3,8 +3,8 @@ Requirements:
 * Flask
 
 Migration:
-* Run `python manage.py db init`
-* Run `python manage.py db migrate`
+* Run `python database.py db init`
+* Run `python database.py db migrate`
 
 Setup:
 * Run `pip install -r requirements.txt`

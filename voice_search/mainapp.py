@@ -1,7 +1,7 @@
 import boto3
 from .config import KEY, SECRET_KEY, BUCKET_NAME
 from flask import Flask, render_template, request, redirect, Response
-from manage import db, app
+from database import db, app
 from models.model import SearchQuery
 import json
 

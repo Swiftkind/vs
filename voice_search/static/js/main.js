@@ -33,16 +33,7 @@ if (!('webkitSpeechRecognition' in window)) {
       $("#speak-message").show();
       $('#speak-message').text("Try again.");
     } else {
-      // Submit keywords to google
-      var query = voice_output.text;
-      var url ='https://www.googleapis.com/customsearch/v1?key='+GOOGLE_API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
-      localStorage.setItem('queryset', url);
-      localStorage.setItem('voice_text', query);
-
-      $.get(url, function(data){
-        var data = data.items; // Contains the data from google
-      });
-      
+      submitToGoogle();
     }
     $('#voice_output').text(voice_output.text);
   };
@@ -61,6 +52,18 @@ if (!('webkitSpeechRecognition' in window)) {
     voice_output.text = linebreak(final_transcript);
     $('#voice_output').text(interim_transcript);
   };
+}
+
+function submitToGoogle() {
+  // Submit keywords to google
+  var query = voice_output.text;
+  var url ='https://www.googleapis.com/customsearch/v1?key='+GOOGLE_API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
+  localStorage.setItem('queryset', url);
+  localStorage.setItem('voice_text', query);
+
+  $.get(url, function(data){
+    var data = data.items; // Contains the data from google
+  });
 }
 
 var two_line = /\n\n/g;
@@ -113,7 +116,12 @@ function stopRecording(button) {
 // Create a download link to save the audio file
 function createDownloadLink() {
   recorder && recorder.exportWAV(function(blob) {
-    var fd = new FormData();
+    uploadToS3(blob);
+  });
+}
+// Upload to s3
+function uploadToS3(blob) {
+  var fd = new FormData();
     fd.append('filename',name);
     fd.append('data',blob);
     $.ajax({
@@ -123,20 +131,22 @@ function createDownloadLink() {
       processData: false,
       contentType: false
     }).done(function(data){
-      audio_key = data.key;
-
-      var postUrl = window.location.origin + '/queries';
-      var voice = voice_output.text || '';
-        // Upload the keyword and key of the audio file to database
-        $.post(postUrl, {'query': voice, 'key':audio_key}).done(function(data){
-          console.log(data)
-        });
-
+      uploadToDatabase(data);
       window.location.href = window.location.origin + '/results';
     }).fail(function(error){
       console.log(error);
     });
-  });
+}
+// Upload to database
+function uploadToDatabase(data) {
+  audio_key = data.key;
+
+  var postUrl = window.location.origin + '/queries';
+  var voice = voice_output.text || '';
+    // Upload the keyword and key of the audio file to database
+    $.post(postUrl, {'query': voice, 'key':audio_key}).done(function(data){
+      console.log(data)
+    });
 }
 
 window.onload = function init() {
