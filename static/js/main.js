@@ -32,15 +32,22 @@ if (!('webkitSpeechRecognition' in window)) {
       $("#speak-message").show();
       $('#speak-message').text("Try again.");
     } else {
-        // Submit keywords to google
-        const API_KEY = GOOGLE_API_KEY;
-        var query = voice_output.text;
-        var url ='https://www.googleapis.com/customsearch/v1?key='+API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
-        localStorage.setItem('queryset', url);
-        localStorage.setItem('voice_text', query);
+      // Submit keywords to google
+      var query = voice_output.text;
+      var url ='https://www.googleapis.com/customsearch/v1?key='+GOOGLE_API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
+      localStorage.setItem('queryset', url);
+      localStorage.setItem('voice_text', query);
+
       $.get(url, function(data){
         var data = data.items; // Contains the data from google
+
+        var postUrl = window.location.origin + '/queries';
+        $.post(postUrl, {'q': query}).done(function(data){
+          console.log(data)
+        });
+
       });
+      
     }
     $('#voice_output').text(voice_output.text);
   };
