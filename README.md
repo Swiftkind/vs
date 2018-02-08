@@ -2,11 +2,14 @@ Requirements:
 * Python 3.5.x
 * Flask
 
+Migration:
+* Run `python manage.py db init`
+* Run `python manage.py db migrate`
+
 Setup:
 * Run `pip install -r requirements.txt`
 * Run `export FLASK_APP=mainapp.py`
 * To run the app, `flask run`
-
 
 Setup boto3:
 * If you have the AWS CLI installed, then you can use it to configure your credentials file by typing this command:

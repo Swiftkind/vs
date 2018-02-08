@@ -18,7 +18,7 @@ def upload_file():
     """
     if request.method == 'POST':
         file = request.files['data']
-        # s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
+        s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
         return Response(json.dumps({"key":KEY}), 200, mimetype="application/json")
 
     return ('', 400)
