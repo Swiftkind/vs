@@ -1,7 +1,6 @@
 import boto3
 from .config import KEY, SECRET_KEY, BUCKET_NAME
 from flask import Flask, render_template, request, redirect
-from .models.model import QuerySearch
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -18,7 +17,7 @@ def upload_file():
     """
     if request.method == 'POST':
         file = request.files['data']
-       s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
+        s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
         return ('', 200)
 
     return ('', 400)
