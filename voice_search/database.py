@@ -13,6 +13,7 @@ sys.path.append(BASE_DIR)
 
 
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
 
 # load database
 app.config.update(**DATABASE)

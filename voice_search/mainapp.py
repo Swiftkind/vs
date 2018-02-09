@@ -1,9 +1,11 @@
 import boto3
 from .config import KEY, SECRET_KEY, BUCKET_NAME
-from flask import Flask, render_template, request, redirect, Response
+from flask import Flask, render_template, request, redirect, Response, url_for
 from database import db, app
 from models.model import SearchQuery
 import json
+from flask_security import current_user
+
 
 s3 = boto3.resource('s3')
 db.create_all()

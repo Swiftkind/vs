@@ -19,3 +19,5 @@ s3transfer==0.1.12
 six==1.11.0
 SQLAlchemy==1.2.2
 Werkzeug==0.14.1
+Flask-Admin
+Flask-Security>=1.7.5
