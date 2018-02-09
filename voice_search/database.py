@@ -4,7 +4,6 @@ from flask import Flask
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask_sqlalchemy import SQLAlchemy
-
 from config import DATABASE
 
 # PROECT ROOT DIR
@@ -14,6 +13,7 @@ sys.path.append(BASE_DIR)
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
+
 
 # load database
 app.config.update(**DATABASE)

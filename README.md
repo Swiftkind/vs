@@ -6,10 +6,13 @@ Migration:
 * Run `python database.py db init`
 * Run `python database.py db migrate`
 
-Setup:
+Setup and initialize database:
 * Run `pip install -r requirements.txt`
 * Run `export FLASK_APP=mainapp.py`
 * To run the app, `flask run`
+
+Add user:
+* Run `python create_user.py`
 
 Setup boto3:
 * If you have the AWS CLI installed, then you can use it to configure your credentials file by typing this command:
