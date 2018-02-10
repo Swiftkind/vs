@@ -1,17 +1,43 @@
 import boto3
 from .config import KEY, SECRET_KEY, BUCKET_NAME
-from flask import render_template, request, Response
-from database import db, app
-from models.model import SearchQuery
+from flask import render_template, request, Response, redirect
+from database import db, app, bcrypt
+from models.model import SearchQuery, User
 import json
+from flask_security.forms import LoginForm
+from flask_wtf.csrf import CSRFProtect
+from forms import LoginForm
+from flask.ext.login import LoginManager, login_user
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
 
 s3 = boto3.resource('s3')
 db.create_all()
+csrf = CSRFProtect(app)
 
 @app.route('/')
 def mainapp():
     return render_template('index.html')
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """For GET requests, display the login form. 
+    For POSTS, login the current user by processing the form.
+
+    """
+    form = LoginForm(request.form)
+    error = {}
+    if request.method == 'POST':
+        if form.validate():
+            user = User.query.filter_by(email=form.email.data).first()
+            if user:
+                if bcrypt.check_password_hash(user.password, form.password.data):
+                    login_user(user, remember=True)
+                    return redirect("/admin/")
+        error = {'error':'Invalid Email or password.'}
+    return render_template("security/login_user.html", form=form, error=error)
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -39,5 +65,12 @@ def save_queries():
         db.session.commit()
         return ('', 200)
     return ('', 400)
+
+@login_manager.user_loader
+def load_user(user_id):
+    try:
+        return User.query.get(user_id)
+    except:
+        return None
 
 app.secret_key = SECRET_KEY

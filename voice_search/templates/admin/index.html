@@ -7,7 +7,7 @@
             {% if not current_user.is_authenticated %}
               <h1>Voice Search Admin</h1>
               <p>
-                  <a class="btn btn-primary" href="{{ url_for('security.login') }}">login</a>
+                  <a class="btn btn-primary" href="{{ url_for('login') }}">login</a>
               </p>
             {% else %}
               <h1>Welcome Admin</h1>
