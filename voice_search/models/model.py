@@ -83,8 +83,6 @@ security = Security(app, user_datastore)
 admin = flask_admin.Admin(
     app,
     'voice-search',
-    base_template='my_master.html',
-    template_mode='bootstrap3',
 )
 
 # Add model views

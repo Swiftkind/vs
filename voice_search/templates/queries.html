@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<ul class="list-group">
+  {% for query_list in query_lists %}
+    <li class="list-group-item">
+      <p>Keyword: {{query_list.keyword}}</p>
+      <p>Audio name: {{query_list.link}}</p>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock body %}

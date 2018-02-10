@@ -7,7 +7,7 @@ import json
 from flask_security.forms import LoginForm
 from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm
-from flask.ext.login import LoginManager, login_user
+from flask.ext.login import LoginManager, login_user, login_required
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -39,6 +39,7 @@ def login():
         error = {'error':'Invalid Email or password.'}
     return render_template("security/login_user.html", form=form, error=error)
 
+@csrf.exempt
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     """ Upload to s3 bucket
@@ -55,6 +56,7 @@ def search_results():
     if request.method == 'GET':
         return render_template('results.html')
 
+@csrf.exempt
 @app.route('/queries', methods=['GET', 'POST'])
 def save_queries():
     if request.method == 'POST':
@@ -65,6 +67,12 @@ def save_queries():
         db.session.commit()
         return ('', 200)
     return ('', 400)
+
+@app.route('/list', methods=['GET'])
+@login_required
+def queries():
+    query_lists = SearchQuery.query.all()
+    return render_template('queries.html',query_lists=query_lists)
 
 @login_manager.user_loader
 def load_user(user_id):
