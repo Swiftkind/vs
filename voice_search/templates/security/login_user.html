@@ -6,12 +6,19 @@
         <div class="well">
             <form action="{{ url_for('login') }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <input type="text" name="email" class="email">
-                <input type="password" name="password" class="password">
-                {{error.error}}
-                <button type="submit">login</button>
+                <div class="form-group">
+                  <label for="email">Email address</label>
+                  <input type="email" class="form-control" id="email"  name="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password"  name="password" placeholder="Password">
+                </div>
+                <dir class="form-group">
+                    <p class="text-danger">{{error.error}}</p>
+                </dir>
+                <button type="submit" class="btn btn-primary">login</button>
             </form>
-            <p>Not yet signed up? Please <a href="{{ url_for('security.register') }}">register for an account</a>.</p>
         </div>
     </div>
 </div>

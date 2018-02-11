@@ -6,8 +6,8 @@ from models.model import SearchQuery, User
 import json
 from flask_security.forms import LoginForm
 from flask_wtf.csrf import CSRFProtect
-from forms import LoginForm
-from flask.ext.login import LoginManager, login_user, login_required
+from forms import LoginForm, EditProfileForm, EditPasswordForm
+from flask.ext.login import LoginManager, login_user, login_required, current_user
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -68,11 +68,41 @@ def save_queries():
         return ('', 200)
     return ('', 400)
 
-@app.route('/list', methods=['GET'])
+@app.route('/query-list', methods=['GET'])
 @login_required
 def queries():
     query_lists = SearchQuery.query.all()
     return render_template('queries.html',query_lists=query_lists)
+
+@app.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    success = {}
+    form = EditProfileForm(request.form)
+    user = User.query.get(current_user.id)
+    if request.method == 'POST':
+        if form.validate():
+            user.email = form.email.data
+            user.first_name = form.first_name.data
+            user.last_name = form.last_name.data
+            db.session.commit()
+            success = {'message': 'Successfully Edited'}
+    return render_template('security/edit_user.html',user=user, success=success, form=form)
+
+@app.route('/edit-password', methods=['GET', 'POST'])
+@login_required
+def edit_password():
+    success = {}
+    user = User.query.get(current_user.id)
+    form = EditPasswordForm(request.form)
+    if request.method == 'POST':
+        if form.validate():
+            if bcrypt.check_password_hash(user.password, form.old_password.data):
+                user.password = bcrypt.generate_password_hash(form.password.data)
+                db.session.commit()
+                success = {'message': 'Successfully Edited'}
+    return render_template('security/edit_password.html', form=form, success=success)
+
 
 @login_manager.user_loader
 def load_user(user_id):
