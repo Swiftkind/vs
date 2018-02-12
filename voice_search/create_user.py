@@ -13,13 +13,16 @@ def register():
     with app.app_context():
         db.metadata.create_all(db.engine)
 
-        print('Enter email address: '),
+        print('Enter email address:'),
         email = raw_input()
         users = User.query.all()
 
         match = re.match(email_regex, email)
 
-        if match == None:
+        if not email:
+            print('Email is required.')
+            register()
+        elif match == None:
             print('Invalid email.')
             register()
 
@@ -27,16 +30,13 @@ def register():
             if user.email == email:
                 print('Email is already taken.')
                 register()
-            elif not email:
-                print('Email is required.')
-                register()
 
         password = getpass()
 
-        confirm_password = getpass()
+        confirm_password = getpass("Confirm password:")
 
         if not password:
-            print('Password is required .') 
+            print('Password is required.') 
             register()
         elif password == confirm_password:
             user = User(
