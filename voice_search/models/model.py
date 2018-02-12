@@ -1,8 +1,7 @@
-from voice_search.database import db
+from voice_search.database import db, app
 from flask_security import RoleMixin, UserMixin, Security, SQLAlchemyUserDatastore, current_user
 from flask_admin.contrib import sqla
 import flask_admin
-from voice_search.database import app
 from flask_admin import helpers as admin_helpers
 from flask import url_for
 from werkzeug.security import generate_password_hash, check_password_hash

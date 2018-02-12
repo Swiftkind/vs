@@ -2,7 +2,7 @@ from getpass import getpass
 import sys
 
 from flask import current_app
-from database import app, db, bcrypt
+from database import db, app, bcrypt
 from models.model import User
 
 

@@ -1,9 +1,9 @@
 import boto3
+import json
 from .config import KEY, SECRET_KEY, BUCKET_NAME
-from flask import render_template, request, Response, redirect
+from flask import Flask, render_template, request, Response, redirect
 from database import db, app, bcrypt
 from models.model import SearchQuery, User
-import json
 from flask_security.forms import LoginForm
 from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm, EditProfileForm, EditPasswordForm
@@ -94,13 +94,12 @@ def edit_profile():
 def edit_password():
     success = {}
     user = User.query.get(current_user.id)
-    form = EditPasswordForm(request.form)
+    form = EditPasswordForm(request.form, user=user)
     if request.method == 'POST':
         if form.validate():
-            if bcrypt.check_password_hash(user.password, form.old_password.data):
-                user.password = bcrypt.generate_password_hash(form.password.data)
-                db.session.commit()
-                success = {'message': 'Successfully Edited'}
+            user.password = bcrypt.generate_password_hash(form.password.data)
+            db.session.commit()
+            success = {'message': 'Successfully Edited'}
     return render_template('security/edit_password.html', form=form, success=success)
 
 
