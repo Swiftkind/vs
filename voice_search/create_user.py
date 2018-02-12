@@ -1,4 +1,5 @@
 import sys
+import re
 from getpass import getpass
 from app import db, app, bcrypt
 from models.model import User
@@ -6,12 +7,21 @@ from models.model import User
 
 def register():
     """Main entry point for script."""
+
+    email_regex = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+
     with app.app_context():
         db.metadata.create_all(db.engine)
 
         print('Enter email address: '),
         email = raw_input()
         users = User.query.all()
+
+        match = re.match(email_regex, email)
+
+        if match == None:
+            print('Invalid email.')
+            register()
 
         for user in users:
             if user.email == email:
