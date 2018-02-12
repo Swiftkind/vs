@@ -1,4 +1,4 @@
-from voice_search.database import db, app
+from voice_search.app import db, app
 from flask_security import RoleMixin, UserMixin, Security, SQLAlchemyUserDatastore, current_user
 from flask_admin.contrib import sqla
 import flask_admin

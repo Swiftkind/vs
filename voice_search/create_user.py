@@ -1,8 +1,6 @@
-from getpass import getpass
 import sys
-
-from flask import current_app
-from database import db, app, bcrypt
+from getpass import getpass
+from app import db, app, bcrypt
 from models.model import User
 
 

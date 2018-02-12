@@ -1,13 +1,12 @@
 import boto3
 import json
 from .config import KEY, SECRET_KEY, BUCKET_NAME
-from flask import Flask, render_template, request, Response, redirect
-from database import db, app, bcrypt
+from flask import render_template, request, Response, redirect
+from app import db, app, bcrypt
 from models.model import SearchQuery, User
-from flask_security.forms import LoginForm
 from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm, EditProfileForm, EditPasswordForm
-from flask.ext.login import LoginManager, login_user, login_required, current_user
+from flask_login import LoginManager, login_user, login_required, current_user
 
 login_manager = LoginManager()
 login_manager.init_app(app)
