@@ -1,6 +1,6 @@
 from wtforms import Form, StringField, PasswordField, validators
 from models.model import User
-from app import bcrypt
+from db import bcrypt
 
 
 class LoginForm(Form):
@@ -15,7 +15,6 @@ class EditProfileForm(Form):
 
 
 class EditPasswordForm(Form):
-
     old_password = PasswordField('Old Password', [validators.Required()])
     password = PasswordField('New Password', [
         validators.DataRequired(),

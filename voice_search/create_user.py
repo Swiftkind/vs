@@ -1,7 +1,7 @@
 import sys
 import re
 from getpass import getpass
-from app import db, app, bcrypt
+from db import db, app, bcrypt
 from models.model import User
 
 

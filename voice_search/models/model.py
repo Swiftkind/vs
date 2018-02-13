@@ -1,4 +1,4 @@
-from voice_search.app import db, app
+from voice_search.db import db, app
 from flask_security import RoleMixin, UserMixin, Security, SQLAlchemyUserDatastore, current_user
 from flask_admin.contrib import sqla
 import flask_admin
@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 # Create customized model view class
-class MyModelView(sqla.ModelView):
+class VoiceSearchModelView(sqla.ModelView):
 
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
@@ -85,8 +85,8 @@ admin = flask_admin.Admin(
 )
 
 # Add model views
-admin.add_view(MyModelView(Role, db.session))
-admin.add_view(MyModelView(User, db.session))
+admin.add_view(VoiceSearchModelView(Role, db.session))
+admin.add_view(VoiceSearchModelView(User, db.session))
 
 # define a context processor for merging flask-admin's template context into the
 # flask-security views.

@@ -2,7 +2,7 @@ import boto3
 import json
 from .config import KEY, SECRET_KEY, BUCKET_NAME
 from flask import render_template, request, Response, redirect
-from app import db, app, bcrypt
+from db import db, app, bcrypt
 from models.model import SearchQuery, User
 from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm, EditProfileForm, EditPasswordForm
@@ -38,7 +38,6 @@ def login():
         error = {'error':'Invalid Email or password.'}
     return render_template("security/login_user.html", form=form, error=error)
 
-@csrf.exempt
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     """ Upload to s3 bucket
@@ -52,12 +51,15 @@ def upload_file():
 
 @app.route('/results', methods=['GET'])
 def search_results():
+    """ Show results from google
+    """
     if request.method == 'GET':
         return render_template('results.html')
 
-@csrf.exempt
 @app.route('/queries', methods=['GET', 'POST'])
 def save_queries():
+    """ Save the keywords and s3 key to database
+    """
     if request.method == 'POST':
         keyword = str(request.form['query'])
         key = str(request.form['key'])
@@ -70,6 +72,8 @@ def save_queries():
 @app.route('/query-list', methods=['GET'])
 @login_required
 def queries():
+    """ Show lists of keyword and s3 key saved on database
+    """
     query_lists = SearchQuery.query.all()
     return render_template('queries.html',query_lists=query_lists)
 
