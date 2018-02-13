@@ -7,6 +7,7 @@
     <li class="list-group-item">
       <p>Keyword: {{query_list.keyword}}</p>
       <p>Audio name: {{query_list.link}}</p>
+      <a href="{{ url_for('download_audio', key=query_list.link) }}"><button class="btn btn-primary">Download</button></a>
     </li>
   {% endfor %}
 </ul>

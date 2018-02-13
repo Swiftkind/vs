@@ -141,10 +141,10 @@ function uploadToDatabase(data) {
 
   var postUrl = window.location.origin + '/queries';
   var voice = voice_output.text || '';
-    // Upload the keyword and key of the audio file to database
-    $.post(postUrl, {'query': voice, 'key':audio_key, 'csrf_token':csrf_token}).done(function(data){
+  // Upload the keyword and key of the audio file to database
+  $.post(postUrl, {'query': voice, 'key':audio_key, 'csrf_token':csrf_token}).done(function(data){
 
-    });
+  });
 }
 
 window.onload = function init() {

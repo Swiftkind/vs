@@ -1,12 +1,13 @@
 import boto3
 import json
 from .config import KEY, SECRET_KEY, BUCKET_NAME
-from flask import render_template, request, Response, redirect
+from flask import render_template, request, Response, redirect, url_for
 from db import db, app, bcrypt
 from models.model import SearchQuery, User
 from flask_wtf.csrf import CSRFProtect
 from forms import LoginForm, EditProfileForm, EditPasswordForm
 from flask_login import LoginManager, login_user, login_required, current_user
+from db import DOWNLOADS_DIR
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -76,6 +77,13 @@ def queries():
     """
     query_lists = SearchQuery.query.all()
     return render_template('queries.html',query_lists=query_lists)
+
+@app.route('/download-audio/<string:key>')
+def download_audio(key):
+    """ Download audio file from s3
+    """
+    s3.Bucket(BUCKET_NAME).download_file(key, DOWNLOADS_DIR + "/" + key)
+    return redirect(url_for('queries'), 200)
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required

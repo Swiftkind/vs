@@ -11,9 +11,13 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.config.from_pyfile('config.py')
 
-# PROECT ROOT DIR
+# PROJECT ROOT DIR
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
+
+# LOCAL DOWNLOAD DIRECTORY
+home = os.path.expanduser("~")
+DOWNLOADS_DIR = os.path.join(home, "Downloads")
 
 # load database
 app.config.update(**DATABASE)
