@@ -1,10 +1,10 @@
 from voice_search.db import db, app
-from flask_security import RoleMixin, UserMixin, Security, SQLAlchemyUserDatastore, current_user
+from flask_security import (RoleMixin, UserMixin, Security,
+                            SQLAlchemyUserDatastore, current_user)
 from flask_admin.contrib import sqla
 import flask_admin
 from flask_admin import helpers as admin_helpers
-from flask import url_for
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import url_for, request, redirect, abort
 
 
 # Create customized model view class
@@ -21,7 +21,8 @@ class VoiceSearchModelView(sqla.ModelView):
 
     def _handle_view(self, name, **kwargs):
         """
-        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        Override builtin _handle_view in order to redirect users when
+        a view is not accessible.
         """
         if not self.is_accessible():
             if current_user.is_authenticated:
@@ -88,7 +89,8 @@ admin = flask_admin.Admin(
 admin.add_view(VoiceSearchModelView(Role, db.session))
 admin.add_view(VoiceSearchModelView(User, db.session))
 
-# define a context processor for merging flask-admin's template context into the
+
+# define a context processor for merging flask-admin template context into the
 # flask-security views.
 @security.context_processor
 def security_context_processor():

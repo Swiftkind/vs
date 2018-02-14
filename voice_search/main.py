@@ -17,13 +17,15 @@ s3 = boto3.resource('s3')
 db.create_all()
 csrf = CSRFProtect(app)
 
+
 @app.route('/')
 def mainapp():
     return render_template('index.html')
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """For GET requests, display the login form. 
+    """For GET requests, display the login form.
     For POSTS, login the current user by processing the form.
 
     """
@@ -33,11 +35,13 @@ def login():
         if form.validate():
             user = User.query.filter_by(email=form.email.data).first()
             if user:
-                if bcrypt.check_password_hash(user.password, form.password.data):
+                if bcrypt.check_password_hash(user.password,
+                                              form.password.data):
                     login_user(user, remember=True)
                     return redirect("/admin/")
-        error = {'error':'Invalid Email or password.'}
+        error = {'error': 'Invalid Email or password.'}
     return render_template("security/login_user.html", form=form, error=error)
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
@@ -46,9 +50,11 @@ def upload_file():
     if request.method == 'POST':
         file = request.files['data']
         s3.Bucket(BUCKET_NAME).put_object(Key=KEY, Body=file)
-        return Response(json.dumps({"key":KEY}), 200, mimetype="application/json")
+        return Response(json.dumps({"key": KEY}), 200,
+                        mimetype="application/json")
 
     return ('', 400)
+
 
 @app.route('/results', methods=['GET'])
 def search_results():
@@ -56,6 +62,7 @@ def search_results():
     """
     if request.method == 'GET':
         return render_template('results.html')
+
 
 @app.route('/queries', methods=['GET', 'POST'])
 def save_queries():
@@ -70,13 +77,15 @@ def save_queries():
         return ('', 200)
     return ('', 400)
 
+
 @app.route('/query-list', methods=['GET'])
 @login_required
 def queries():
     """ Show lists of keyword and s3 key saved on database
     """
     query_lists = SearchQuery.query.all()
-    return render_template('queries.html',query_lists=query_lists)
+    return render_template('queries.html', query_lists=query_lists)
+
 
 @app.route('/download-audio/<string:key>')
 def download_audio(key):
@@ -84,6 +93,7 @@ def download_audio(key):
     """
     s3.Bucket(BUCKET_NAME).download_file(key, DOWNLOADS_DIR + "/" + key)
     return redirect(url_for('queries'), 200)
+
 
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
@@ -98,7 +108,9 @@ def edit_profile():
             user.last_name = form.last_name.data
             db.session.commit()
             success = {'message': 'Successfully Edited'}
-    return render_template('security/edit_user.html',user=user, success=success, form=form)
+    return render_template('security/edit_user.html',
+                           user=user, success=success, form=form)
+
 
 @app.route('/edit-password', methods=['GET', 'POST'])
 @login_required
@@ -111,14 +123,16 @@ def edit_password():
             user.password = bcrypt.generate_password_hash(form.password.data)
             db.session.commit()
             success = {'message': 'Successfully Edited'}
-    return render_template('security/edit_password.html', form=form, success=success)
+    return render_template('security/edit_password.html',
+                           form=form, success=success)
 
 
 @login_manager.user_loader
 def load_user(user_id):
     try:
         return User.query.get(user_id)
-    except:
+    except Exception:
         return None
+
 
 app.secret_key = SECRET_KEY

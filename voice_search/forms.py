@@ -9,7 +9,8 @@ class LoginForm(Form):
 
 
 class EditProfileForm(Form):
-    email = StringField('Email address', [validators.DataRequired(), validators.Email()])
+    email = StringField('Email address', [validators.DataRequired(),
+                        validators.Email()])
     first_name = StringField()
     last_name = StringField()
 
@@ -31,7 +32,8 @@ class EditPasswordForm(Form):
         if not form_validate:
             return False
         user = User.query.get(self.user.id)
-        if not bcrypt.check_password_hash(user.password, self.old_password.data):
+        if not bcrypt.check_password_hash(user.password,
+                                          self.old_password.data):
             self.old_password.errors.append('Wrong old password')
             return False
 

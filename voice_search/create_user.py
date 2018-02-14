@@ -8,7 +8,8 @@ from models.model import User
 def register():
     """Main entry point for script."""
 
-    email_regex = '^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$'
+    email_regex = ('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+'
+                   + '(\.[a-z0-9-]+)*(\.[a-z]{2,4})$')
 
     with app.app_context():
         db.metadata.create_all(db.engine)
@@ -22,7 +23,7 @@ def register():
         if not email:
             print('Email is required.')
             register()
-        elif match == None:
+        elif match is None:
             print('Invalid email.')
             register()
 
@@ -36,11 +37,11 @@ def register():
         confirm_password = getpass("Confirm password:")
 
         if not password:
-            print('Password is required.') 
+            print('Password is required.')
             register()
         elif password == confirm_password:
             user = User(
-                email=email, 
+                email=email,
                 password=bcrypt.generate_password_hash(password),
                 active=True)
             db.session.add(user)
@@ -48,8 +49,9 @@ def register():
             print ('User added.')
             sys.exit()
         else:
-            print('Password did not matched.') 
+            print('Password did not matched.')
             register()
+
 
 if __name__ == '__main__':
     register()
