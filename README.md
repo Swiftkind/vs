@@ -1,6 +1,11 @@
 Requirements:
 * Python 3.5.x
 * Flask
+* Postgres
+
+Database setup:
+* Create local.py
+* Copy the local.py.sample and change it according to your settings
 
 Migration:
 * Run `python db.py db init`

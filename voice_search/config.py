@@ -8,13 +8,6 @@ SECRET_KEY = os.urandom(24)
 # S3 bucket name
 BUCKET_NAME = 'search.audio'
 
-
-# DATABASE
-DATABASE = {
-    'SQLALCHEMY_DATABASE_URI':'sqlite:///app.db',
-    'SQLALCHEMY_TRACK_MODIFICATIONS': False
-}
-
 # Flask-Security config
 SECURITY_URL_PREFIX = "/admin"
 

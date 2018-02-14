@@ -6,3 +6,4 @@ env/
 migrations/
 *.db
 *.pyc
+local.py
