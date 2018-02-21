@@ -1,13 +1,20 @@
-import boto3
 import json
-from .config import KEY, SECRET_KEY, BUCKET_NAME
+import boto3
 from flask import render_template, request, Response, redirect, url_for
-from db import db, app, bcrypt
-from models.model import SearchQuery, User
 from flask_wtf.csrf import CSRFProtect
-from forms import LoginForm, EditProfileForm, EditPasswordForm
 from flask_login import LoginManager, login_user, login_required, current_user
-from db import DOWNLOADS_DIR
+from .config import (KEY,
+                    SECRET_KEY,
+                    BUCKET_NAME,
+                    DOWNLOADS_DIR)
+from .db import DBConnection, app, bcrypt
+from .forms import LoginForm, EditProfileForm, EditPasswordForm
+from .models import SearchQuery, User
+
+
+connection = DBConnection()
+connection.connect()
+db = connection.db
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -26,7 +33,7 @@ def mainapp():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """For GET requests, display the login form.
-    For POSTS, login the current user by processing the form.
+    For POST, login the current user by processing the form.
 
     """
     form = LoginForm(request.form)
@@ -98,6 +105,8 @@ def download_audio(key):
 @app.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+    """ Edit the admin account information
+    """
     success = {}
     form = EditProfileForm(request.form)
     user = User.query.get(current_user.id)
@@ -115,6 +124,8 @@ def edit_profile():
 @app.route('/edit-password', methods=['GET', 'POST'])
 @login_required
 def edit_password():
+    """ Edit the admin account password
+    """
     success = {}
     user = User.query.get(current_user.id)
     form = EditPasswordForm(request.form, user=user)

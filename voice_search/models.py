@@ -1,4 +1,4 @@
-from voice_search.db import db, app
+from .db import DBConnection, app
 from flask_security import (RoleMixin, UserMixin, Security,
                             SQLAlchemyUserDatastore, current_user)
 from flask_admin.contrib import sqla
@@ -6,32 +6,9 @@ import flask_admin
 from flask_admin import helpers as admin_helpers
 from flask import url_for, request, redirect, abort
 
-
-# Create customized model view class
-class VoiceSearchModelView(sqla.ModelView):
-
-    def is_accessible(self):
-        if not current_user.is_active or not current_user.is_authenticated:
-            return False
-
-        if current_user.has_role('superuser'):
-            return True
-
-        return False
-
-    def _handle_view(self, name, **kwargs):
-        """
-        Override builtin _handle_view in order to redirect users when
-        a view is not accessible.
-        """
-        if not self.is_accessible():
-            if current_user.is_authenticated:
-                # permission denied
-                abort(403)
-            else:
-                # login
-                return redirect(url_for('security.login', next=request.url))
-
+connection = DBConnection()
+connection.connect()
+db = connection.db
 
 class SearchQuery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -84,6 +61,31 @@ admin = flask_admin.Admin(
     app,
     'voice-search',
 )
+
+# Create customized model view class
+class VoiceSearchModelView(sqla.ModelView):
+
+    def is_accessible(self):
+        if not current_user.is_active or not current_user.is_authenticated:
+            return False
+
+        if current_user.has_role('superuser'):
+            return True
+
+        return False
+
+    def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when
+        a view is not accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                abort(403)
+            else:
+                # login
+                return redirect(url_for('security.login', next=request.url))
 
 # Add model views
 admin.add_view(VoiceSearchModelView(Role, db.session))

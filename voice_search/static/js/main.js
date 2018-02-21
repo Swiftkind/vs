@@ -13,6 +13,106 @@ var recognition = new webkitSpeechRecognition();
 recognition.continuous = false;
 recognition.interimResults = true;
 
+
+var uploadModules = function () {
+  // For uploading to database and s3
+
+  // Upload to s3
+  function uploadToS3(blob) {
+    var fd = new FormData();
+    var url = window.location.origin + '/upload';
+    fd.append('filename',name);
+    fd.append('data',blob);
+    fd.append('csrf_token',csrf_token);
+
+    $.post(url, fd).done(function(data){
+      _uploadToDatabase(data);
+      window.location.href = window.location.origin + '/results';
+    }).fail(function(error){
+      console.log(error);
+    });
+  }
+
+  // Upload to database
+  function _uploadToDatabase(data) {
+    audio_key = data.key;
+
+    var postUrl = window.location.origin + '/queries';
+    var voice = voice_output.text || '';
+    // Upload the keyword and key of the audio file to database
+    $.post(postUrl, {'query': voice, 'key':audio_key, 'csrf_token':csrf_token}).done(function(data){
+
+    });
+  }
+
+  return {
+    uploadS3: uploadToS3
+  }
+}
+
+var uploadModule = uploadModules();
+
+var recorderModules = function () {
+  // Recorder module
+
+  function startRecording(button) {
+    recorder && recorder.record();
+  }
+
+  function stopRecording(button) {
+    recorder && recorder.stop();
+    // create WAV download link using audio data blob
+    _createDownloadLink();
+    recorder.clear();
+  }
+
+  // Create a download link to save the audio file
+  function _createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+      uploadModule.uploadS3(blob);
+    });
+  }
+
+  return {
+    startRecord: startRecording,
+    stopRecord: stopRecording
+  }
+}
+
+var googleModules = function () {
+  // Modules for google
+  function linebreak(s) {
+    // Formats the display text
+    return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+  }
+
+  function capitalize(s) {
+    // Capitalized the first letter of the query string
+    return s.replace(first_char, function(m) { return m.toUpperCase(); });
+  }
+
+  function submitToGoogle() {
+    // Submit keywords to google
+    var query = voice_output.text;
+    var url ='https://www.googleapis.com/customsearch/v1?key='+GOOGLE_API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
+    localStorage.setItem('queryset', url);
+    localStorage.setItem('voice_text', query);
+
+    $.get(url, function(data){
+      var data = data.items; // Contains the data from google
+    });
+  }
+
+  return {
+    sendToGoogle: submitToGoogle,
+    lineBreak: linebreak,
+    capitalizeFirst: capitalize
+  }
+}
+
+var recordModule = recorderModules();
+var googleModule = googleModules();
+
 // Will trigger when user click the mic icon
 function startButton(event) {
   $("#speak-message").text("Loading...");
@@ -24,7 +124,7 @@ function startButton(event) {
   }
   final_transcript = '';
   recognition.start();
-  startRecording(this)
+  recordModule.startRecord(this)
   ignore_onend = false;
 }
 
@@ -45,13 +145,13 @@ recognition.onend = function() {
     range.selectNode(document.getElementById('voice_output'));
     window.getSelection().addRange(range);
   }
-  stopRecording(this);
+  recordModule.stopRecord(this);
   // If the app didn't catch any words
   if (voice_output.text == null || voice_output.text == '') {
     $("#speak-message").show();
     $('#speak-message').text("Try again.");
   } else {
-    submitToGoogle();
+    googleModule.sendToGoogle();
   }
   $('#voice_output').text(voice_output.text);
 };
@@ -67,85 +167,17 @@ recognition.onresult = function(event) {
     }
   }
   $("#speak-message").hide();
-  final_transcript = capitalize(final_transcript);
-  voice_output.text = linebreak(final_transcript);
+  final_transcript = googleModule.capitalizeFirst(final_transcript);
+  voice_output.text = googleModule.lineBreak(final_transcript);
   $('#voice_output').text(interim_transcript);
 };
 
-function submitToGoogle() {
-  // Submit keywords to google
-  var query = voice_output.text;
-  var url ='https://www.googleapis.com/customsearch/v1?key='+GOOGLE_API_KEY+'&cx=017576662512468239146:omuauf_lfve&q='+query+'';
-  localStorage.setItem('queryset', url);
-  localStorage.setItem('voice_text', query);
-
-  $.get(url, function(data){
-    var data = data.items; // Contains the data from google
-  });
-}
-
-function linebreak(s) {
-  return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-}
-
-function capitalize(s) {
-  return s.replace(first_char, function(m) { return m.toUpperCase(); });
-}
-
-// Recorder code
+// Starts the user media input
 function startUserMedia(stream) {
-  var input = audio_context.createMediaStreamSource(stream);
-  
-  recorder = new Recorder(input);
-}
-
-function startRecording(button) {
-  recorder && recorder.record();
-}
-
-function stopRecording(button) {
-  recorder && recorder.stop();
-  // create WAV download link using audio data blob
-  createDownloadLink();
-  
-  recorder.clear();
-}
-// Create a download link to save the audio file
-function createDownloadLink() {
-  recorder && recorder.exportWAV(function(blob) {
-    uploadToS3(blob);
-  });
-}
-// Upload to s3
-function uploadToS3(blob) {
-  var fd = new FormData();
-  fd.append('filename',name);
-  fd.append('data',blob);
-  fd.append('csrf_token',csrf_token);
-  $.ajax({
-    type: "POST",
-    url: window.location.origin + '/upload',
-    data: fd,
-    processData: false,
-    contentType: false
-  }).done(function(data){
-    uploadToDatabase(data);
-    window.location.href = window.location.origin + '/results';
-  }).fail(function(error){
-    console.log(error);
-  });
-}
-// Upload to database
-function uploadToDatabase(data) {
-  audio_key = data.key;
-
-  var postUrl = window.location.origin + '/queries';
-  var voice = voice_output.text || '';
-  // Upload the keyword and key of the audio file to database
-  $.post(postUrl, {'query': voice, 'key':audio_key, 'csrf_token':csrf_token}).done(function(data){
-
-  });
-}
+    var input = audio_context.createMediaStreamSource(stream);
+    
+    recorder = new Recorder(input);
+  }
 
 window.onload = function init() {
   try {

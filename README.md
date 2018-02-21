@@ -3,16 +3,19 @@ Requirements:
 * Flask
 * Postgres
 
+Create virtual environment and install requirements.txt:
+* Run `virtualenv --python=python3 venv`
+* Activate the virtual environment
+* Run `pip install -r requirements.txt`
+
 Database setup:
-* Create local.py
-* Copy the local.py.sample and change it according to your settings
+* Change the database settings in config.py POSTGRES variable
 
 Migration:
 * Run `python db.py db init`
 * Run `python db.py db migrate`
 
 Setup and initialize database:
-* Run `pip install -r requirements.txt`
 * Run `export FLASK_APP=main.py`
 * To run the app, `flask run`
 

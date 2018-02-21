@@ -1,58 +1,59 @@
 import sys
 import re
 from getpass import getpass
-from db import db, app, bcrypt
-from models.model import User
+from db import DBConnection, app, bcrypt
+from models import User
 
 
-def register():
-    """Main entry point for script."""
-
+class CreateUser(DBConnection):
     email_regex = ('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+'
                    + '(\.[a-z0-9-]+)*(\.[a-z]{2,4})$')
 
-    with app.app_context():
-        db.metadata.create_all(db.engine)
+    def __init__(self):
+        self.connect()
 
-        print('Enter email address:'),
-        email = raw_input()
-        users = User.query.all()
+    def register(self):
+        with app.app_context():
+            print('Enter email address:'),
+            email = input()
+            users = User.query.all()
 
-        match = re.match(email_regex, email)
+            match = re.match(self.email_regex, email)
 
-        if not email:
-            print('Email is required.')
-            register()
-        elif match is None:
-            print('Invalid email.')
-            register()
-
-        for user in users:
-            if user.email == email:
-                print('Email is already taken.')
+            if not email:
+                print('Email is required.')
+                self.register()
+            elif match is None:
+                print('Invalid email.')
                 register()
 
-        password = getpass()
+            user = User.query.filter_by(email=email).first()
+            if user:
+                print('Email is already taken.')
+                self.register()
 
-        confirm_password = getpass("Confirm password:")
+            password = getpass()
 
-        if not password:
-            print('Password is required.')
-            register()
-        elif password == confirm_password:
-            user = User(
-                email=email,
-                password=bcrypt.generate_password_hash(password),
-                active=True)
-            db.session.add(user)
-            db.session.commit()
-            print ('User added.')
-            sys.exit()
-        else:
-            print('Password did not matched.')
-            register()
+            confirm_password = getpass("Confirm password:")
+
+            if not password:
+                print('Password is required.')
+                self.register()
+            elif password == confirm_password:
+                user = User(
+                    email=email,
+                    password=bcrypt.generate_password_hash(password),
+                    active=True)
+                self.db.session.add(user)
+                self.db.session.commit()
+                print ('User added.')
+                sys.exit()
+            else:
+                print('Password did not matched.')
+                self.register()
 
 
 if __name__ == '__main__':
-    register()
+    create_user = CreateUser()
+    create_user.register()
     sys.exit()

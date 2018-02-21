@@ -22,3 +22,15 @@ SECURITY_POST_REGISTER_VIEW = "/admin/"
 SECURITY_REGISTERABLE = True
 SECURITY_SEND_REGISTER_EMAIL = False
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+
+HOME = os.path.expanduser("~")
+DOWNLOADS_DIR = os.path.join(HOME, "Downloads")
+
+POSTGRES = {
+    'user': '',
+    'pw': '',
+    'db': '',
+    'host': '',
+    'port': '',
+}
