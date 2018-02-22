@@ -20,12 +20,16 @@ var uploadModules = function () {
   // Upload to s3
   function uploadToS3(blob) {
     var fd = new FormData();
-    var url = window.location.origin + '/upload';
     fd.append('filename',name);
     fd.append('data',blob);
     fd.append('csrf_token',csrf_token);
-
-    $.post(url, fd).done(function(data){
+    $.ajax({
+      type: "POST",
+      url: window.location.origin + '/upload',
+      data: fd,
+      processData: false,
+      contentType: false
+    }).done(function(data){
       _uploadToDatabase(data);
       window.location.href = window.location.origin + '/results';
     }).fail(function(error){
