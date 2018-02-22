@@ -4,9 +4,9 @@ from flask import render_template, request, Response, redirect, url_for
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager, login_user, login_required, current_user
 from .config import (KEY,
-                    SECRET_KEY,
-                    BUCKET_NAME,
-                    DOWNLOADS_DIR)
+                     SECRET_KEY,
+                     BUCKET_NAME,
+                     DOWNLOADS_DIR)
 from .db import DBConnection, app, bcrypt
 from .forms import LoginForm, EditProfileForm, EditPasswordForm
 from .models import SearchQuery, User

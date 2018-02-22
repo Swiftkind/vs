@@ -1,6 +1,6 @@
 from wtforms import Form, StringField, PasswordField, validators
-from voice_search.models import User
-from voice_search.db import bcrypt
+from .models import User
+from .db import bcrypt
 
 
 class LoginForm(Form):

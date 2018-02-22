@@ -1,6 +1,8 @@
 import datetime
 import os
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 # Name of audio file
 KEY = 'audio ' + str(datetime.datetime.now())
 # Secret key of flask app
@@ -28,9 +30,9 @@ HOME = os.path.expanduser("~")
 DOWNLOADS_DIR = os.path.join(HOME, "Downloads")
 
 POSTGRES = {
-    'user': '',
-    'pw': '',
-    'db': '',
-    'host': '',
-    'port': '',
+    'user': 'dev',
+    'pw': 'password',
+    'db': 'voice_search',
+    'host': '127.0.0.1',
+    'port': '5432',
 }

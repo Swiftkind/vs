@@ -16,7 +16,6 @@ class CreateUser(DBConnection):
         with app.app_context():
             print('Enter email address:'),
             email = input()
-            users = User.query.all()
 
             match = re.match(self.email_regex, email)
 
@@ -25,7 +24,7 @@ class CreateUser(DBConnection):
                 self.register()
             elif match is None:
                 print('Invalid email.')
-                register()
+                self.register()
 
             user = User.query.filter_by(email=email).first()
             if user:
@@ -42,11 +41,12 @@ class CreateUser(DBConnection):
             elif password == confirm_password:
                 user = User(
                     email=email,
-                    password=bcrypt.generate_password_hash(password),
+                    password=bcrypt.generate_password_hash(password
+                                                           ).decode('utf-8'),
                     active=True)
                 self.db.session.add(user)
                 self.db.session.commit()
-                print ('User added.')
+                print('User added.')
                 sys.exit()
             else:
                 print('Password did not matched.')

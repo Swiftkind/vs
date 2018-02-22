@@ -1,14 +1,19 @@
-from .db import DBConnection, app
 from flask_security import (RoleMixin, UserMixin, Security,
                             SQLAlchemyUserDatastore, current_user)
 from flask_admin.contrib import sqla
 import flask_admin
 from flask_admin import helpers as admin_helpers
 from flask import url_for, request, redirect, abort
+try:
+    from .db import DBConnection, app
+except ImportError:
+    from db import DBConnection, app
+
 
 connection = DBConnection()
 connection.connect()
 db = connection.db
+
 
 class SearchQuery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,6 +67,7 @@ admin = flask_admin.Admin(
     'voice-search',
 )
 
+
 # Create customized model view class
 class VoiceSearchModelView(sqla.ModelView):
 
@@ -86,6 +92,7 @@ class VoiceSearchModelView(sqla.ModelView):
             else:
                 # login
                 return redirect(url_for('security.login', next=request.url))
+
 
 # Add model views
 admin.add_view(VoiceSearchModelView(Role, db.session))
